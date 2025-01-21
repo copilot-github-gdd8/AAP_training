@@ -1,0 +1,17 @@
+---
+- name: Until demo
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Check if the interface is up
+      ios_command:
+        commands:
+          - "show ip interface brief | include Ethernet0/1"
+      register: interface_status
+      until: "'up' in interface_status.stdout[0]"
+      retries: 3
+      delay: 5
+
+    - name: Display the interface status
+      debug:
+        var: interface_status

@@ -1,0 +1,14 @@
+---
+- name: Demo on ios_config
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Configure hostname
+      ios_config:
+        lines:
+          - hostname {{ inventory_hostname }}
+      register: output
+    
+    - name: Print the result
+      debug:
+        msg: "{{ output }}"

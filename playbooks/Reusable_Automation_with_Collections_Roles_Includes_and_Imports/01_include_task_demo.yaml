@@ -1,0 +1,19 @@
+---
+- name: Demo include tasks
+  hosts: ios
+  gather_facts: true
+  tasks:
+    - name: Include task
+      include_tasks: precheck_tasks.yaml
+      vars:
+        precheck_cmds:
+          - show interface description
+    
+    - name: Configure description
+      ios_config:
+        lines:
+          - interface e0/2
+          - description "The is the newwwwwwwwwww demo description"
+
+    - name: Include Post check
+      include_tasks: postcheck_tasks.yaml

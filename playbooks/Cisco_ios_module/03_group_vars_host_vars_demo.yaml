@@ -1,0 +1,28 @@
+---
+- name: Demo on group_vars and host_vars
+  hosts: ios
+  gather_facts: false
+  tasks:
+    - name: Display hostname
+      debug:
+        msg: 
+         - "Hostname is {{ inventory_hostname }}"
+         - "IP address is {{ ansible_host }}"
+         - "Group is {{ group_names }}"
+         - "Playbook file path {{ playbook_dir }}"
+         - "Inventory file path {{ inventory_dir }}"
+         - "{{ inventory_file }}"
+         - "Ansible config file path {{ ansible_config_file }}"
+
+    - name: Display magic variable
+      debug:
+        var: vars
+
+
+    - name: include_vars
+      include_vars:
+        file: cisco_include_vars.yaml
+
+    - name: Display NTP server
+      debug:
+        msg: "NTP server is {{ ntp_server }}"

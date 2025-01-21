@@ -1,0 +1,10 @@
+---
+- name: Pre-check commands
+  ios_command:
+    commands: "{{ precheck_cmds }}"
+  register: precheck_output
+
+- name: Copy pre-check output to a file
+  copy:
+    content: "{{ precheck_output.stdout[0] }}"
+    dest: Precheck.txt

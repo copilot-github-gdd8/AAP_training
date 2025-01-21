@@ -1,0 +1,16 @@
+---
+- name: Demo on env Lookup Plugin
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Demo on env Lookup Plugin
+      debug:
+        msg: 
+          - "{{ lookup('env', 'DEMO_USERNAME') }}"
+          - "{{ lookup('env', 'DEMO_PASSWORD') }}"
+          - "{{ lookup('env', 'DEMO_API_KEY') }}"
+
+    - name: Configure Demo user on Cisco device
+      ios_config:
+        lines:
+          - username {{ lookup('env', 'DEMO_USERNAME') }} privilege {{ lookup('env', 'DEMO_PRIVILEDGE', default='3') }} secret {{ lookup('env', 'DEMO_PASSWORD') }}

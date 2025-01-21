@@ -1,0 +1,35 @@
+---
+- name: Registering variables with a loop
+  hosts: ios
+  gather_facts: no
+  vars:
+    interfaces:
+    - name: Ethernet0/1
+      description: Management Interface
+      ip_address: 10.10.10.1
+      subnet: 255.255.255.0
+
+    - name: Ethernet0/2
+      description: "Connected to WAN"
+      ip_address: 10.10.10.2
+      subnet: 255.255.255.0
+  
+  tasks:
+    - name: Fetch interface traffic and assign to a variable
+      ios_command:
+        commands: 
+          - "show interface {{ item.name }} | include input rate"
+      register: interface_rate
+      loop: "{{ interfaces }}"
+
+    - name: Display interface_rate variable
+      debug:
+        var: interface_rate
+    - name: Loop over the registered variable
+      debug:
+        msg: 
+          - "{{ int_rate.stdout }}"
+      loop: "{{ interface_rate.results }}"
+      loop_control:
+        loop_var: int_rate
+        label: "Traffic on {{ int_rate.item.name }}"

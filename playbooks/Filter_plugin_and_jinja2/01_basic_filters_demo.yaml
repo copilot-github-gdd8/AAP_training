@@ -1,0 +1,19 @@
+---
+- name: Demo filter
+  hosts: ios
+  gather_facts: no
+  vars:
+    local_username_list:
+      - username: admin
+        password: cisco
+      - username: operator
+        password: operator
+    local_iusername_dict:
+      admin: cisco
+      password: admin
+
+  tasks:
+    - name: Filters Demo
+      debug:
+        msg: 
+        - "{{ inventory_hostname | upper }}"

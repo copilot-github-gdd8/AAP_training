@@ -1,0 +1,11 @@
+---
+- name: Demo roles
+  hosts: ios
+  gather_facts: true
+  # roles:
+  #   - demo_role
+  tasks:
+    - name: Include demo_role
+      include_role:
+        name: demo_role
+        tasks_from: main

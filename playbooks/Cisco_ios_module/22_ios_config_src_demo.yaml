@@ -1,0 +1,14 @@
+---
+- name: Demo on ios_config
+  hosts: ios
+  gather_facts: no
+  connection: network_cli
+  tasks:
+    - name: Demo on src
+      ios_config:
+        src: templates/ios_interface_config.cfg
+      register: output
+    
+    - name: Display output
+      debug:
+        msg: "{{ output }}"

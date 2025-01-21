@@ -1,0 +1,17 @@
+service password-encryption
+!
+ip domain name {{ domain_name }}
+!
+hostname {{ inventory_hostname | upper }}
+!
+no ip domain-lookup
+!
+{% if dns_server is defined %}
+ip name-server {{ dns_server }}
+{% else %}
+ip name-server {{dns_server| default('2.2.2.2')}}
+{% endif %}
+!
+{% for ntp_server in ntp_servers %}
+ntp_server {{ ntp_server }}
+{% endfor %}

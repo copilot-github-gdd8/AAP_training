@@ -1,0 +1,27 @@
+---
+- name: Demo on set_fact module
+  hosts: ios
+  gather_facts: no
+  vars:
+    standard_ios: "Version 15.4(2)T4,"
+  tasks:
+    - name: Run show version command
+      ios_command:
+        commands: show version
+      register: show_version
+    
+    - name: Assign to a variable using set_fact 
+      set_fact:
+        current_ios: "{{ show_version.stdout[0] | regex_search('Version (\\S+),') }}"
+
+    - name: Display the current ios
+      debug:
+        var: current_ios
+
+    - name: Check upgrade is required or not
+      set_fact:
+        upgrade_required: "{{ current_ios == standard_ios }}"
+
+    - name: Display if upgrade is required or not
+      debug:
+        var: upgrade_required

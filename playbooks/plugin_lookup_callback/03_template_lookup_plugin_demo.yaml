@@ -1,0 +1,10 @@
+---
+- name: Demo on template Lookup Plugin
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Demo on template Lookup Plugin
+      debug:
+        msg: 
+          - "{{ lookup('template', '/home/dsu979/Desktop/Network_Automation/Ansible/playbooks/templates/device_basic_config.j2').split('\n') }}"
+

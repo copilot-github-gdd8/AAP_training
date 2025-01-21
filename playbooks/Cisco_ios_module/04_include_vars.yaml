@@ -1,0 +1,23 @@
+---
+- name: Include vars
+  hosts: ios
+  gather_facts: no
+  tasks:
+    # - name: magic ansible variable
+    #   debug:
+    #     var: vars
+    - name: show group names
+      debug:
+        msg: "{{ group_names }}"
+
+    - name: Include vars
+      include_vars: 
+        file: cisco_include_vars.yaml
+      when: "'ios' in group_names"
+
+    - name: Display NTP server
+      debug:
+        msg: 
+          - "NTP server is {{ ntp_server }}"
+          - "DNS server is {{ dns_server }}"
+    

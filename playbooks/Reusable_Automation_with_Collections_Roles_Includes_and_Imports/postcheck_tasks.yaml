@@ -1,0 +1,10 @@
+---
+- name: Post-check commands
+  ios_command:
+    commands: show interface description
+  register: postcheck_output
+
+- name: Copy pre-check output to a file
+  copy:
+    content: "{{ postcheck_output.stdout[0] }}"
+    dest: Postcheck.txt

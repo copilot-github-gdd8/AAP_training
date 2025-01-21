@@ -1,0 +1,21 @@
+---
+- name: Demo on ios_commands
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: send show command
+      ios_command:
+        commands:
+          - show ip interface brief
+          - show ip interface brief | include Ethernet0/1
+        match: any
+        wait_for:
+          - result[1] contains "up"
+        interval: 5
+        retries: 10
+      register: show_commands
+    
+    - name: print the output
+      debug:
+        msg: "{{ show_commands }}"
+    

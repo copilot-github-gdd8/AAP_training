@@ -1,0 +1,20 @@
+---
+- name: Backup configuraiton
+  hosts: ios
+  gather_facts: false
+  tasks:
+    - name: running configuration
+      ios_command:
+       commands: show running-config
+      register: show_run
+    
+    - name: Ensure the file path exists
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/config_backup/ {{ inventory_hostname }}"
+        state: directory
+        mode: '0755'
+
+    - name: Save the file
+      copy: 
+        content: "{{ show_run.stdout[0].split('\n') | join('\n') }}"
+        dest: "{{ playbook_dir }}/config_backup/ {{ inventory_hostname }}/{{inventory_hostname}}_config_backup.txt"

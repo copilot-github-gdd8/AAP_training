@@ -1,0 +1,17 @@
+- name: Demo on check_mode
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Configure description
+      ios_config:
+        lines:
+          - description Configured using check_mode
+        parents: interface E0/4
+        match: line
+        diff_against: startup
+      register: configure_description
+      check_mode: yes
+    
+    - name: Display the output
+      debug:
+        msg: "Commands to apply: {{ configure_description.commands }}"

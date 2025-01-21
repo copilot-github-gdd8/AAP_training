@@ -1,0 +1,30 @@
+---
+- name: Ternary filter Demo
+  hosts: ios
+  gather_facts: no
+  vars:
+    - ethernet_interfaces:
+        - Ethernet0/2
+        - Ethernet0/3
+  tasks:
+    - name: Check interface status
+      ios_command:
+        commands: 
+          - show ip interface brief | include Ethernet0/2
+          - show ip interface brief | include Ethernet0/3
+      register: interface_status
+
+    - name: Apply ternary filter
+      debug:
+        msg: 
+          - "{{ ('up' in interface_status.stdout[0]) | ternary('Interface is up', 'Need to unshut interface ' + ethernet_interfaces[0]) }}"
+          - "{{ ('up' in interface_status.stdout[0]) | ternary('Interface is up', 'Need to unshut interface') }}"
+
+    - name: Unshut interface
+      ios_command:
+        commands: 
+          - "conf t"
+          - "interface {{ ethernet_interfaces[0] }}"
+          - "no shutdown"
+        # diff_against: running
+      when: "'up' not in interface_status.stdout[0]"

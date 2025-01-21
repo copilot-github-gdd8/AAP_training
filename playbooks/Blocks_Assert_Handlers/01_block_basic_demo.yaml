@@ -1,0 +1,42 @@
+---
+- name: Block in Ansible
+  hosts: ios
+  gather_facts: no
+  vars:
+    excute_tasks: false
+  tasks:
+    - name: Demo on Block
+      block:
+        - name: Show IP Interface Brief
+          debug:
+            msg: "Running first task in Block"
+        
+        - name: Sending show command
+          ios_command:
+            commands:
+              - show ip int brief
+          register: output
+
+        - name: This task will be skiped
+          debug:
+            msg: "This task will be skiped because the above tasked is not failed"
+      when: excute_tasks  
+
+      rescue:
+        - name: Print when errors
+          ping:
+          register: ping_status
+
+        - name: Display result
+          debug:
+            msg: "Error occured: {{ ping_status }}"
+
+      always:
+        - name: Always run this task
+          debug:
+            msg: "This task will always run"
+    
+    - name: Run if excute_tasks is false
+      debug:
+        msg: "This task will run because excute_tasks is false"
+      when: not excute_tasks

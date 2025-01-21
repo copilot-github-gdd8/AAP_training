@@ -1,0 +1,19 @@
+---
+all:
+  children:
+    asa:
+      hosts:
+        asa1:
+          ansible_host: 192.168.1.28
+    ios:
+      hosts:
+        R2:
+          ansible_host: 192.168.1.27
+        R3:
+          ansible_host: 192.168.1.42
+        R4:
+          ansible_host: 192.168.1.43
+        R5:
+          ansible_host: 192.168.1.44
+        R6:
+          ansible_host: 192.168.1.46

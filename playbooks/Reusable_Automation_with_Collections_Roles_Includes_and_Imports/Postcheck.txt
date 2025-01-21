@@ -1,0 +1,5 @@
+Interface                      Status         Protocol Description
+Et0/0                          up             up       
+Et0/1                          admin down     down     "This is a description"
+Et0/2                          up             up       "The is the import demo description"
+Et0/3                          admin down     down

@@ -1,0 +1,30 @@
+---
+- name: Precheck for Automated OS Upgrade
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Check if IOS Upgrade is required or network_cli
+      ios_command:
+        commands:
+          - show version
+      register: show_version_output
+
+    - name: Check if IOS Upgrade is required or network_cli
+      debug:
+        msg: 
+          - "{{ show_version_output.stdout_lines[0] | regex_search('Version ([\\d\\.\\(\\)T]+)', '\\1') }}"
+          - "Upgrade Required: {{ inventory_hostname }}"
+      when: show_version_output.stdout_lines[0] | regex_search('Version ([\\d\\.\\(\\)T]+)', '\\1') != '16.9.4'
+
+    - name: Take a backup of the running configuration
+      ios_command:
+        commands:
+          - show running-config
+      register: show_running_config
+    
+    - name: Backup configuration
+      copy:
+        content: "{{ show_running_config.stdout_lines[0] | join('\n') }}"
+        dest: "{{ playbook_dir }}/backup_files/{{ inventory_hostname }}_backup_configuration.cfg"
+
+    

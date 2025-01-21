@@ -1,0 +1,17 @@
+---
+- name: Demo on resource hostname
+  hosts: ios
+  gather_facts: no
+  connection: network_cli
+  tasks:
+    - name: Configure hostname
+      cisco.ios.ios_hostname:
+        config:
+          # hostname: "{{ inventory_hostname }}_replaced"
+          running_config: hostname {{ inventory_hostname }}_replaced
+        state: parsed
+      register: output
+    
+    - name: Display output
+      debug:
+        msg: "{{ output }}"

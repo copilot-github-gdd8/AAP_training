@@ -1,0 +1,14 @@
+---
+- name: Demo on Callback Plugins
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Demo on Callback Plugins
+      ios_command:
+        commands:
+          - show ip int brief
+      register: output
+
+    - name: Display output
+      debug:
+        msg: "{{ output }}"

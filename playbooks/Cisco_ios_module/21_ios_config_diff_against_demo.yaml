@@ -1,0 +1,24 @@
+---
+- name: Demo on ios_config_diff
+  hosts: ios
+  gather_facts: no
+  connection: network_cli
+  tasks:
+    - name: Show diff between running config and demo config
+      ios_config:
+        lines:
+          - description Connected to Management Int
+        parents:
+          - interface Ethernet0/1
+        backup: yes
+        diff_against: intended
+        intended_config: "{{ 'R2_config.2025-01-14@14:32:57' }}"
+        diff_ignore_lines:
+          - ^ntp clock-period
+          - ip access-list extended mgmt-acl
+        save_when: modified
+      register: output
+
+    - name: Print the diff
+      debug:
+        msg: "{{ output }}"

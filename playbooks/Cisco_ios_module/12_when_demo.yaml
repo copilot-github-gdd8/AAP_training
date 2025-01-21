@@ -1,0 +1,18 @@
+---
+- name: Demo on when condition
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Check if the interface is up
+      ios_command:
+        commands:
+          - "show ip interface brief | include Ethernet0/1"
+      register: interface_status
+    
+    - name: Un-shut interfce with down state
+      ios_command:
+        commands:
+          - "conf t"
+          - "interface Ethernet0/1"
+          - "no shutdown"
+      when: "'down' in interface_status.stdout[0]"

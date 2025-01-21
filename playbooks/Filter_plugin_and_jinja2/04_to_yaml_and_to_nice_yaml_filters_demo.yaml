@@ -1,0 +1,26 @@
+---
+- name: Formatting data - YAML
+  hosts: ios
+  gather_facts: false
+  tasks:
+    - name: Gather facts from Cisco IOS devices
+      ios_facts:
+        gather_subset: all
+      register: ios_facts
+
+    - name: Display ios_facts
+      debug:
+        msg: 
+          - "{{ ios_facts }}"
+          - "{{ ios_facts | to_yaml }}"
+          - "{{ ios_facts | to_nice_yaml }}"
+    
+    - name: Save content to_yaml
+      copy:
+        content: "{{ ios_facts | to_yaml }}"
+        dest: /home/dsu979/Desktop/Network_Automation/Ansible/playbooks/Filter_plugin_and_jinja2/to_yaml.yaml
+
+    - name: Save content to_nice_yaml
+      copy:
+        content: "{{ ios_facts | to_nice_yaml }}"
+        dest: /home/dsu979/Desktop/Network_Automation/Ansible/playbooks/Filter_plugin_and_jinja2/to_nice_yaml.yaml

@@ -1,0 +1,16 @@
+---
+- name: Demo on ios_facts
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Gather facts from the device
+      ios_facts:
+        available_network_resources: true
+        gather_network_resources:
+          - hostname
+          - interfaces
+          - static_routes
+
+    - name: Display ios_facts
+      debug:
+        msg: "{{ ansible_facts }}"

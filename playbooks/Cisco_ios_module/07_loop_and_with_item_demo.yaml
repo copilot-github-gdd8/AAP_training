@@ -1,0 +1,72 @@
+--- 
+- name: Demo on loop and with_items
+  hosts: R2
+  gather_facts: no
+  vars:
+    local_usernames:
+      - admin
+      - operator
+      - [admin_ro, operator_ro, [supperadmin_ro, superoperator_ro]]
+
+    local_username_list_dict:
+      - { name: admin, pwd: cisco }
+      - { name: operator, pwd: cisco }
+
+    local_username_dict:
+      admin: cisco
+      operator: cisco
+
+  tasks:
+    - name: Print items using with_items
+      debug:
+        msg: "User {{ item }}"
+      with_items: "{{ local_usernames }}"
+
+    - name: Print items using loop
+      debug:
+        msg: "User {{ item }}"
+      loop: "{{ local_usernames }}"
+
+    - name: Print items using loop with Flattern 1 level
+      debug:
+        msg: "User {{ item }}"
+      loop: "{{ local_usernames | flatten(levels=2) }}"
+
+    - name: Define the list directly in the task - with_items
+      debug:
+        msg: "{{ item }}"
+      with_list:
+        - admin
+        - operator
+        - superadmin
+        - [admin_ro, operator_ro, [supperadmin_ro, superoperator_ro]]
+    
+    - name: Define the list directly in the task - loop
+      debug:
+        msg: "{{ item }}"
+      loop:
+        - admin
+        - operator
+        - superadmin
+        - [admin_ro, operator_ro, [supperadmin_ro, superoperator_ro]]
+
+
+    - name: Print items using with_dict with dictionary
+      debug:
+        msg: "User {{ item.name }} with password {{ item.pwd }}"
+      with_list: "{{ local_username_list_dict }}"
+
+    - name: Print items using loop with dictionary
+      debug:
+        msg: "User {{ item.name }} with password {{ item.pwd }}"
+      loop: "{{ local_username_list_dict }}"
+
+    - name: Print items using loop with with_dict dict
+      debug:
+        msg: "User {{ item.key }} with password {{ item.value }}"
+      with_dict: "{{ local_username_dict }}"
+      
+    - name: Print items using loop with dict
+      debug:
+        msg: "User {{ item.key }} with password {{ item.value }}"
+      loop: "{{ local_username_dict | dict2items }}"

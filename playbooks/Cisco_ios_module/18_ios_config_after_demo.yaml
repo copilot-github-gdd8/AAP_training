@@ -1,0 +1,9 @@
+---
+- name: Demo on ios_config
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Configure Multiple interface
+      cisco.ios.ios_config:
+        lines:
+          

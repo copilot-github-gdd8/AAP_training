@@ -1,0 +1,24 @@
+---
+- name: Demo on Plugins Basics
+  hosts: ios
+  gather_facts: no
+  vars:
+    file_contents: "{{ lookup('file', 'config_files/R2basic_config.cfg', wantlist=True) }}"
+
+  tasks:
+    - name: Display the contents of the file
+      debug:
+        var: file_contents
+
+    - name: Display the dig plugin output
+      ansible.builtin.debug:
+        msg:
+          - "{{ lookup('dig', 'google.com') }}"
+          - "{{ lookup('dig', 'google.com', wantlist=true) }}"
+    
+    - name: User lookup plugin
+      debug:
+        msg: "IP Address {{index + 1}}: {{ item }}"
+      loop: "{{ lookup('dig', 'example.com', wantlist=true) }}"
+      loop_control:
+        index_var: index

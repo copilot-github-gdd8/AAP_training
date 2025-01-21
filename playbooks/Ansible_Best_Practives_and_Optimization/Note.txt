@@ -1,0 +1,17 @@
+Strategies are useful when:
+- Some hosts take longer to complete task
+- You need parallelism and efficiency
+- You want to control error-handling approach when working across devices
+
+- Linear - Run tasks on all hosts sequentially
+- Free - Allows hosts to run task independently
+- Debug - Pauses on error for interactive debugging
+
+There is a limitation of Diff and check_mode module: 
+can only combine check with diff using the diff_against options of 
+  - startup
+  - intended
+but not running.
+
+Best Practices are to use the diff and check_mode to safely run the playbook.
+

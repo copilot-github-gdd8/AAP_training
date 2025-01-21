@@ -1,0 +1,24 @@
+---
+- name: Demo on ios_config match and before
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Configure interface
+      cisco.ios.ios_config:
+        lines:
+          - permit ip host 10.10.10.10 any log
+          - permit ip host 20.20.20.20 any log
+          - permit ip host 30.30.30.30 any log
+          - deny   ip any any log
+        parents:
+          - ip access-list extended mgmt-acl
+        # before:
+        #   - ip access-list extended mgmt-acl
+        #   - no 20
+        # match: line
+      register: output
+      
+    - name: Print the output
+      debug:
+        msg:
+         - "{{ output }}"

@@ -1,0 +1,32 @@
+---
+- name: Demo on delegate_to
+  hosts: ios
+  gather_facts: no
+  vars:
+    precheck_cmds:
+      - show ip interface brief
+      - show interfaces
+      - show version
+  tasks:
+    - name: Pre-check commands
+      ios_command:
+        commands:
+          - "{{ item }}"        
+      loop: "{{ precheck_cmds }}"
+      register: precheck_output
+      delegate_to: R3
+    
+    - name: Create directory
+      file:
+        path: "{{ playbook_dir }}/temp_files"
+        state: directory
+        mode: 0755
+      delegate_to: localhost
+      run_once: yes
+
+    - name: Copy the content
+      copy:
+        content: "{{ precheck_output.results | to_nice_json }}"
+        dest: "{{ playbook_dir }}/temp_files/{{ inventory_hostname }}_prechecks_output.json"
+      loop: "{{ precheck_output.results }}"
+      delegate_to: localhost

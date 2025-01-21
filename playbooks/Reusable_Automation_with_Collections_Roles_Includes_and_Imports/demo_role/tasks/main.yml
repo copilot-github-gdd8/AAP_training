@@ -1,0 +1,5 @@
+---
+# tasks file for demo_role
+- name: Display ios_facts
+  debug: 
+    msg: "{{ ansible_facts }}"

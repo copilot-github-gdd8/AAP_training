@@ -1,0 +1,10 @@
+---
+- name: Demo on Jinja2 template
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Generate basic configuration
+      template:
+        src: /home/dsu979/Desktop/Network_Automation/Ansible/playbooks/templates/device_basic_config.j2
+        dest: "//home/dsu979/Desktop/Network_Automation/Ansible/playbooks/config_files/{{ inventory_hostname }}basic_config.cfg"
+

@@ -1,0 +1,23 @@
+---
+- name: Demo on resource ios_interfaces
+  hosts: ios
+  gather_facts: no
+  connection: network_cli
+  tasks:
+    - name: show version
+      ios_command:
+        commands: show version
+      register: show_version
+
+    - name: Print show version
+      debug:
+        msg: "{{ show_version.stdout[0] | regex_search('Cisco IOS Software, .* Version ([^,]+)', '\\1') }}"
+
+    # - name: Get interfaces facts
+    #   ios_interfaces:
+    #     state: gathered
+    #   register: interfaces_facts
+
+    # - name: Print interfaces facts
+    #   debug:
+    #     var: interfaces_facts

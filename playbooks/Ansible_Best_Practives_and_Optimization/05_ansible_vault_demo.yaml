@@ -1,0 +1,17 @@
+---
+- name: Demo on Ansible Vault
+  hosts: ios
+  gather_facts: no
+  vars:
+    new_username: vault_user
+    new_password: vault_secret_1234
+  tasks:
+    - name: Show the content of the vaulted variable
+      ios_command:
+        commands:
+          - show ip int brief
+      register: domain_output
+    
+    - name: Show the content of the vaulted variable
+      debug:
+        msg: "{{ domain_output }}"

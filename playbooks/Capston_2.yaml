@@ -1,0 +1,25 @@
+---
+- name: Capston Project 2
+  hosts: ios
+  gather_facts: false
+  tasks:
+    - name: Configure a new local username and password
+      cisco.ios.ios_config:
+        lines:
+          - username {{ inventory_hostname }} privilege 15 password 0 {{ inventory_hostname }}
+        diff_against: running
+
+    - name: Fetch all the exsitng username
+      cisco.ios.ios_command:
+        commands: show run | include username
+      register: interfaces_facts
+
+    - name: Display all the existing username
+      debug:
+        msg: "{{ interfaces_facts.stdout[0].split('\n') }}"
+
+    - name: Removed the existing username just created
+      cisco.ios.ios_config:
+        lines:
+          - no username {{ inventory_hostname }} privilege 15 password 0 {{ inventory_hostname }}
+      register: interfaces_facts

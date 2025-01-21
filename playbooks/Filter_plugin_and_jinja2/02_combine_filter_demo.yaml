@@ -1,0 +1,23 @@
+---
+- name: Combine two dictionaries using combine()
+  hosts: ios
+  gather_facts: no
+  vars:
+    basic_config:
+      - interface: Ethernet0/3
+        ip_address: 10.10.14.1
+        subnet_mask: 255.255.255.0
+
+    additional_config:
+      description: "This is a test interface"
+      mtu: 1500
+
+  tasks:
+    - name: Combine two dictionaries
+      set_fact:
+        full_config: "{{ basic_config | combine(additional_config) }}"     
+
+    - name: Display the combined dictionary
+      debug:
+       msg: "{{ full_config }}" 
+      

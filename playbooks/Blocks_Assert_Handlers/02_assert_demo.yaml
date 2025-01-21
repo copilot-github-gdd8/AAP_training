@@ -1,0 +1,40 @@
+---
+- name: Demo on Assert module
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Gather all legacy gather_facts
+      ios_facts:
+        gather_subset: 
+          - hardware
+          - interfaces
+
+    - name: Display ios_facts
+      set_fact: 
+        interface_status: "{{ ansible_facts['net_interfaces']['Ethernet0/2']['lineprotocol'] }}"
+
+    - name: Fetch available memory
+      set_fact:
+        available_memory: "{{ ansible_facts['net_memfree_mb'] }}"
+
+    - name: Check if memory available for new ios images
+      assert:
+        that:
+          - "{{ (available_memory|int) > 200 }}"
+        fail_msg: "Memory is not sufficient for new ios images"
+        success_msg: "Memory is sufficient for new ios images"
+
+    - name: Assert to unshut interface
+      assert:
+        that:
+          - "{{ interface_status == 'down'}}"
+        fail_msg: "Interface is already up"
+        success_msg: "Interface is down, running unshut command"
+    
+    - name: Unshut interface
+      ios_command:
+        commands:
+          - "conf t"
+          - "interface e0/3"
+          - "no shutdown"
+        

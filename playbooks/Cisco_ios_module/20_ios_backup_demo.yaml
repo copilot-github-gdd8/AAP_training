@@ -1,0 +1,17 @@
+---
+- name: Demo on ios_config match and before
+  hosts: ios
+  gather_facts: no
+  tasks:
+    - name: Demo on backup
+      ios_config:
+        backup: yes
+        lines:
+          - clock timezone EST 5 30
+        backup_options:
+          
+      register: result
+    
+    - name: Print output
+      debug:
+        msg: "{{ result }}"

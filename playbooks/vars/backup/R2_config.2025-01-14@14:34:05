@@ -1,0 +1,123 @@
+Building configuration...
+
+Current configuration : 1361 bytes
+!
+! Last configuration change at 13:02:57 EST Tue Jan 14 2025 by admin
+!
+version 15.4
+service timestamps debug datetime msec
+servicetimestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone EST 5 30
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip domain name example.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$LeMi$0QkeXn.xykzN3cazzhL/V/
+!
+redundancy
+!
+!
+ip ssh time-out 60
+ip ssh version 2
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ ip address dhcp
+!
+interface Ethernet0/1
+ description This is a demo interface
+ ip address 10.10.10.1 255.255.255.0
+ ip helper-address 1.1.1.1
+ ip helper-address 1.1.1.2
+!
+interface Ethernet0/2
+ no ip address
+ ip helper-address 1.1.1.1
+ ip helper-address 1.1.1.2
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ip access-list extended mgmt-acl
+ permit ip host 10.10.10.10 any log
+ permit ip host 20.20.20.20 any log
+ permit ip host 30.30.30.30 any log
+ deny   ip any any log
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+end
